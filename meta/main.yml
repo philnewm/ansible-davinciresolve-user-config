@@ -1,21 +1,16 @@
 ---
 
 galaxy_info:
-  role_name: davinciresolve-user-config
-  namespace: philnewm
-  author: author_name
-  description: ansible-role-template description
-  license: some_license
+  role_name: davinciresolve_user_config
+  author: philnewm
+  description: Configure davinci resolve user settings
+  license: MIT
   min_ansible_version: "2.1"
   platforms:
     - name: EL
       versions:
         - "9"
-    - name: Debian
-      versions:
-        - "bookworm"
-    - name: "Ubuntu"
-      versions:
-        - "jammy"
   galaxy_tags: []
 dependencies: []
+
+...

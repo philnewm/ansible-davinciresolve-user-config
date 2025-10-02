@@ -1,5 +1,27 @@
 ---
 
 state: present
+user: "vagrant"
+
+user_home: "/home/{{ user }}"
+user_path: "/usr/local/bin:/usr/local/sbin"
+dresolve_gnome_favorite: false
+dresolve_pipeline_dev: true
+dresolve_venv_path: "/home/{{ user }}/python_venv/dresolve_venv"
+
+dresolve_user_settings:
+  Language: "en"
+  IsGrayUserInterfaceEnabled: true
+  AutoSaveMode: true
+  ProjectBackupLocation: "{{ user_home }}/Videos/resolve_project_backups"
+  GreyBackground: true
+  DisplayScale: 100
+  AutoCacheDeleteMode: 1
+  MaxCacheAgeInDays: 30
+
+dresolve_desktop_launcher: "com.blackmagicdesign.resolve.desktop"
+
+dresolve_python_modules:
+  - fusionscript-stubs
 
 ...

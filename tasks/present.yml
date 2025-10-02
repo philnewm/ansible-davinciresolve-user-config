@@ -7,8 +7,55 @@
     name: python-apt-common
     state: present
 
-# INFO This task may be obsolete for your use-case
-- name: Gather package facts
-  ansible.builtin.package_facts:
+- name: Get davinci resolve version
+  become: true
+  become_user: "{{ user }}"
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ user_path }}"
+  ansible.builtin.command:
+    cmd: resolve -v
+  register: present_dresolve_version
+  changed_when: false
+
+- name: Set davinci resolve version
+  ansible.builtin.set_fact:
+    dresolve_version_version: "{{ present_dresolve_version.stdout_lines[-1] }}"
+
+- name: Launch davinci resolve headless  # Creates user config
+  become: true
+  become_user: "{{ user }}"
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ user_path }}"
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      timeout 3s resolve
+    executable: /bin/bash
+  register: present_dresolve_version
+  changed_when: false
+  failed_when: result.rc not in [0, 124]
+
+- name: Install xml module requirements
+  ansible.builtin.package:
+    name: python3-lxml
+
+- name: Write user config
+  become: true
+  become_user: "{{ user }}"
+  loop: "{{ dresolve_user_settings | dict2items }}"
+  community.general.xml:
+    path: "{{ user_home }}/.local/share/DaVinciResolve/configs/config.user.xml"
+    xpath: "/SM_UserPrefs/{{ item.key }}"
+    value: "{{ item.value }}"
+
+- name: Add to gnome favorites
+  when: "'gnome-shell' in ansible_facts.packages and dresolve_gnome_favorite"
+  ansible.builtin.include_tasks:
+    file: gnome_favorite.yml
+
+- name: Setup dresolve dev env
+  when: dresolve_pipeline_dev
+  ansible.builtin.include_tasks:
+    file: development_setup.yml
 
 ...
