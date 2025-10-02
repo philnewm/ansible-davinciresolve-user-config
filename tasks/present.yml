@@ -21,6 +21,7 @@
   ansible.builtin.set_fact:
     dresolve_version_version: "{{ present_dresolve_version.stdout_lines[-1] }}"
 
+# Warning doesn't work
 - name: Launch davinci resolve headless  # Creates user config
   become: true
   become_user: "{{ user }}"
@@ -31,7 +32,7 @@
       set -o pipefail
       timeout 3s resolve
     executable: /bin/bash
-  register: present_dresolve_version
+  register: dresolve_hedless_launch
   changed_when: false
   failed_when: result.rc not in [0, 124]
 
@@ -46,7 +47,7 @@
   community.general.xml:
     path: "{{ user_home }}/.local/share/DaVinciResolve/configs/config.user.xml"
     xpath: "/SM_UserPrefs/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ item.value | string }}"
 
 - name: Add to gnome favorites
   when: "'gnome-shell' in ansible_facts.packages and dresolve_gnome_favorite"

@@ -5,7 +5,7 @@ user: "vagrant"
 
 user_home: "/home/{{ user }}"
 user_path: "/usr/local/bin:/usr/local/sbin"
-dresolve_gnome_favorite: false
+dresolve_gnome_favorite: true
 dresolve_pipeline_dev: true
 dresolve_venv_path: "/home/{{ user }}/python_venv/dresolve_venv"
 
