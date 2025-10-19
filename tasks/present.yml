@@ -49,11 +49,6 @@
     xpath: "/SM_UserPrefs/{{ item.key }}"
     value: "{{ item.value | string }}"
 
-- name: Add to gnome favorites
-  when: "'gnome-shell' in ansible_facts.packages and dresolve_gnome_favorite"
-  ansible.builtin.include_tasks:
-    file: gnome_favorite.yml
-
 - name: Setup dresolve dev env
   when: dresolve_pipeline_dev
   ansible.builtin.include_tasks:
