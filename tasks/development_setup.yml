@@ -28,7 +28,7 @@
   ansible.builtin.set_fact:
     dresolve_install_dir: "{{ dresolve_full_path.stdout | dirname | dirname }}"
 
-- name: Ensure maya dev virtualenv exists with latest pip
+- name: Ensure dresolve dev virtualenv exists with latest pip
   become: true
   become_user: "{{ user }}"
   ansible.builtin.pip:
