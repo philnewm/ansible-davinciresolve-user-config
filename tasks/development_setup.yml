@@ -28,7 +28,7 @@
   ansible.builtin.set_fact:
     dresolve_install_dir: "{{ dresolve_full_path.stdout | dirname | dirname }}"
 
-- name: Ensure dresolve dev virtualenv exists with latest pip
+- name: Ensure davinci resolve dev virtualenv exists with latest pip
   become: true
   become_user: "{{ user }}"
   ansible.builtin.pip:
@@ -53,7 +53,7 @@
   changed_when: false
   register: python_version
 
-- name: Create path link to maya install packages
+- name: Create path link to davinci resolve install packages
   become: true
   become_user: "{{ user }}"
   ansible.builtin.copy:
