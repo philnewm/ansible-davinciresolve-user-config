@@ -21,8 +21,8 @@
   ansible.builtin.set_fact:
     dresolve_version_version: "{{ present_dresolve_version.stdout_lines[-1] }}"
 
-# Warning doesn't work
-- name: Launch davinci resolve headless  # Creates user config
+# Was intended to generate user config but doesn't work due to license check
+- name: Launch davinci resolve headless
   become: true
   become_user: "{{ user }}"
   environment:
@@ -34,20 +34,22 @@
     executable: /bin/bash
   register: dresolve_hedless_launch
   changed_when: false
-  failed_when: result.rc not in [0, 124]
+  failed_when: dresolve_hedless_launch.rc not in [0, 124]
 
-- name: Install xml module requirements
-  ansible.builtin.package:
-    name: python3-lxml
+# - name: Install xml module requirements
+#   ansible.builtin.package:
+#     name: python3-lxml
 
-- name: Write user config
-  become: true
-  become_user: "{{ user }}"
-  loop: "{{ dresolve_user_settings | dict2items }}"
-  community.general.xml:
-    path: "{{ user_home }}/.local/share/DaVinciResolve/configs/config.user.xml"
-    xpath: "/SM_UserPrefs/{{ item.key }}"
-    value: "{{ item.value | string }}"
+# INFO config.user.xml gets created after license check - so this doens't work with studio version
+# file copy won't work due to unique DbId
+# - name: Write user config
+#   become: true
+#   become_user: "{{ user }}"
+#   loop: "{{ dresolve_user_settings | dict2items }}"
+#   community.general.xml:
+#     path: "{{ user_home }}/.local/share/DaVinciResolve/configs/config.user.xml"
+#     xpath: "/SM_UserPrefs/{{ item.key }}"
+#     value: "{{ item.value | string }}"
 
 - name: Setup dresolve dev env
   when: dresolve_pipeline_dev
